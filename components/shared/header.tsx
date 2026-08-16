@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '../ui';
 import { ArrowRight, ShoppingCart, User } from 'lucide-react';
+import { SearchInput } from './search-input';
 
 interface HeaderProps {
     className?: string
@@ -25,6 +26,10 @@ export const Header: React.FC<HeaderProps> = ({ className }) => {
                         </div>
                     </div>
                 </Link>
+
+                <div className='mx-10 flex-1'>
+                    <SearchInput />
+                </div>
 
 
                 {/* Правая часть */}
