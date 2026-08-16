@@ -46,7 +46,7 @@ export const ProductGroupList: React.FC<ProductGroupListProps> = ({
             <div className={cn('grid grid-cols-3 gap-12', listClassName)}>
                 {items.map((product, i) => (
                     <ProductCard
-                        key={product.id}
+                        key={i}
                         id={product.id}
                         name={product.name}
                         imageUrl={product.imageUrl}
