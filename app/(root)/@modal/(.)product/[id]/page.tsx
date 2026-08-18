@@ -1,4 +1,4 @@
-import { Container, GroupVariants, ProductImage, Title } from "@/components/shared";
+import { ChooseProductModal, Container, GroupVariants, ProductImage, Title } from "@/components/shared";
 import { prisma } from "@/prisma/prisma-client";
 import { notFound } from "next/navigation";
 
@@ -6,7 +6,13 @@ export default async function ProductModalPage({ params }: { params: Promise<{ i
     const { id } = await params;
 
     const product = await prisma.product.findFirst({
-        where: { id: Number(id) },
+        where: {
+            id: Number(id),
+        },
+        include: {
+            ingredients: true,
+            items: true,
+        },
     });
 
     if (!product) {
@@ -14,8 +20,6 @@ export default async function ProductModalPage({ params }: { params: Promise<{ i
     }
 
     return (
-        <Container className="flex flex-col my-10">
-            <h1>111</h1>
-        </Container>
+        <ChooseProductModal product={product} />
     )
 }

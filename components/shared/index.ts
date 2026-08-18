@@ -12,5 +12,6 @@ export { ProductCard } from './product-card';
 export { SearchInput } from './search-input';
 export { ProductImage } from './product-image';
 export { GroupVariants } from './group-variants';
+export { ChooseProductModal } from './modals/choose-product-modal';
 
 // export { } from './';
