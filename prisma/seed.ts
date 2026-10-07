@@ -7,6 +7,12 @@ const randomDecimalNumber = (min: number, max: number) => {
     return Math.floor(Math.random() * (max - min) * 10 + min * 10) / 10;
 }
 
+const sizePriceMultiplier: Record<number, number> = {
+    20: 1,
+    30: 1.4,
+    40: 1.8,
+};
+
 const generateProductItem = ({
     productId,
     pizzaType,
@@ -16,9 +22,12 @@ const generateProductItem = ({
     pizzaType?: 1 | 2;
     size?: 20 | 30 | 40;
 }) => {
+    const basePrice = randomDecimalNumber(190, 350);
+    const price = size ? basePrice * sizePriceMultiplier[size] : basePrice;
+
     return {
         productId,
-        price: randomDecimalNumber(190, 600),
+        price: Math.round(price),
         pizzaType,
         size,
     } as Prisma.ProductItemUncheckedCreateInput;
