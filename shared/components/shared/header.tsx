@@ -1,16 +1,13 @@
 'use client';
 
 import { cn } from '@/lib/utils';
-import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { Suspense, useEffect, useState } from 'react';
-import toast from 'react-hot-toast';
+import { Suspense, useState } from 'react';
 import { Container } from './container';
 import { AuthModal, CartButton, ProfileButton } from './index';
-import { SearchInput } from './search-input';
 import { ProfileModal } from './modals/profile-modal';
+import { SearchInput } from './search-input';
 import { SearchParamsToast } from './search-params-toast';
 
 interface HeaderProps {
