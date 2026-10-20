@@ -1,12 +1,14 @@
 'use client';
 
-import React, { InputHTMLAttributes } from 'react';
+import React, { InputHTMLAttributes, useState } from 'react';
 import { RequiredSymbol } from '../required-symbol';
 import { Input } from '../../ui';
 import { ErrorText } from '../error-text';
 import { ClearButton } from '../clear-button';
 import { Controller, useFormContext } from 'react-hook-form';
 import { IMaskMixin } from 'react-imask';
+import { Eye, EyeOff } from 'lucide-react';
+import { cn } from '@/lib';
 
 const MaskedInput = IMaskMixin(({ inputRef, ...props }: any) => (
     <Input {...props} ref={inputRef} />
@@ -27,21 +29,27 @@ export const FormInput: React.FC<FormInputProps> = ({ className,
     required,
     mask,
     dispatch,
+    type,
     ...props }) => {
     const {
         register,
         formState: { errors },
         watch,
         control,
-        setValue
+        setValue,
     } = useFormContext();
+
+    const [showPassword, setShowPassword] = useState(false);
+
+    const isPassword = type === 'password';
+    const inputType = isPassword && showPassword ? 'text' : type;
 
     const value = watch(name);
     const errorText = errors[name]?.message as string;
 
     const onHandleClear = () => {
-        setValue(name, '', { shouldValidate: true })
-    }
+        setValue(name, '', { shouldValidate: true });
+    };
 
     return (
         <div className={className}>
@@ -70,7 +78,24 @@ export const FormInput: React.FC<FormInputProps> = ({ className,
                         )}
                     />
                 ) : (
-                    <Input className="h-14 text-md pl-5" {...register(name)} {...props} />
+                    <Input
+                        className={cn('h-14 text-md pl-5', isPassword && 'pr-20')}
+                        type={inputType}
+                        {...register(name)}
+                        {...props}
+                    />
+                )}
+
+                {isPassword && (
+                    <button
+                        type="button"
+                        tabIndex={-1}
+                        onClick={() => setShowPassword((prev) => !prev)}
+                        aria-label={showPassword ? 'Скрыть пароль' : 'Показать пароль'}
+                        className="absolute right-12 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors cursor-pointer"
+                    >
+                        {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                    </button>
                 )}
 
                 {value && <ClearButton onClick={onHandleClear} />}

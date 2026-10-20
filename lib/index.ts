@@ -3,5 +3,8 @@ export * from './calc-pizza-total';
 export * from './get-available-pizza-sizes';
 export * from './get-cart-details';
 export * from './get-cart-item-details';
+export * from './phone-mask';
+export * from './rus-pluralize';
 export * from './use-pizza-options';
-export * from './rus-pluralize'
+export * from './utils';
+export * from './create-payment'

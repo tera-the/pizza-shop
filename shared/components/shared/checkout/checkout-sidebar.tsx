@@ -8,9 +8,10 @@ interface CheckoutSidebarProps {
     className?: string;
     totalAmount: number;
     loading?: boolean;
+    submitting?: boolean;
 }
 
-export const CheckoutSidebar: React.FC<CheckoutSidebarProps> = ({ className, loading, totalAmount }) => {
+export const CheckoutSidebar: React.FC<CheckoutSidebarProps> = ({ className, loading, totalAmount, submitting }) => {
     const TAX_RATE = Number(process.env.NEXT_PUBLIC_TAX_RATE ?? 0.1);
     const DELIVERY_RATE = Number(process.env.NEXT_PUBLIC_DELIVERY_RATE ?? 0.1);
 
@@ -57,6 +58,7 @@ export const CheckoutSidebar: React.FC<CheckoutSidebarProps> = ({ className, loa
                 />
 
                 <Button
+                    loading={submitting}
                     type="submit"
                     className="w-full h-14 rounded-2xl mt-6 text-base font-bold">
                     Оформить заказ

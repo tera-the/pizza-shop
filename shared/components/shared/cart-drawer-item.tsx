@@ -2,8 +2,6 @@ import React from 'react';
 import { CartItemProps } from './cart-item-details/cart-item-details.types';
 import { cn } from '@/lib/utils';
 import * as CartItem from './cart-item-details'
-import { getCartItemDetails } from '@/lib';
-import { CountButton } from './count-button';
 import { Trash2Icon } from 'lucide-react';
 
 interface CartDrawerItemProps extends CartItemProps {
@@ -36,7 +34,7 @@ export const CartDrawerItem: React.FC<CartDrawerItemProps> = ({ className,
                 <hr className='my-3' />
 
                 <div className='flex items-center justify-between'>
-                    <CountButton onClick={onUpdateQuantity} value={quantity} />
+                    <CartItem.CountButton onClick={onUpdateQuantity} value={quantity} />
 
                     <div className='flex items-center gap-3'>
                         <CartItem.Price value={price} />

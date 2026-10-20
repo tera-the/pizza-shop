@@ -1,3 +1,5 @@
+'use client';
+
 import { WhiteBlock } from '../white-block';
 import { FormInput, FormTextarea } from '../form-components';
 import { AddressInput } from '../address-input';

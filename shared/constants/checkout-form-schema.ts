@@ -1,8 +1,7 @@
-import z from "zod/v3";
+import z from "zod";
 
 export const CheckoutFormSchema = z.object({
     email: z.string().email('Неверный формат email'),
-    age: z.number().min(18, 'Минимальный возраст — 18 лет'),
     firstName: z.string().min(2, 'Имя должно содержать не менее 2-х символов'),
     lastName: z.string().min(2, 'Фамилия должна содержать не менее 2-х символов'),
     phone: z

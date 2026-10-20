@@ -2,14 +2,19 @@
 
 import { CheckoutAddressForm, CheckoutCart, CheckoutPersonalForm, Container, Title } from "@/shared/components/shared";
 
-import { createOrder } from "@/app/actions";
+import { createOrder, getProfile } from "@/app/actions";
 import { CheckoutSidebar } from "@/shared/components/shared/checkout/checkout-sidebar";
 import { CheckoutFormSchema, CheckoutFormSchemaTypes } from "@/shared/constants/checkout-form-schema";
 import { useCart } from "@/shared/hooks";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
+import toast from "react-hot-toast";
+import { useEffect, useState } from "react";
 
 export default function CheckoutPage() {
+    const { loading, items, removeCartItem, onClickUpdateQuantity, totalAmount, updateItemQuantity } = useCart();
+    const [submitting, setSubmitting] = useState(false);
+
     const form = useForm<CheckoutFormSchemaTypes>({
         resolver: zodResolver(CheckoutFormSchema),
         defaultValues: {
@@ -22,12 +27,39 @@ export default function CheckoutPage() {
         },
     })
 
-    const onSubmit = async (data: CheckoutFormSchemaTypes) => {
-        console.log(data);
-        console.log(await createOrder(data));
-    };
+    useEffect(() => {
+        async function fillData() {
+            const user = await getProfile();
 
-    const { loading, items, removeCartItem, onClickUpdateQuantity, totalAmount, updateItemQuantity } = useCart();
+            if (!user) return;
+
+            const [firstName, ...rest] = (user.fullName ?? '').trim().split(' ');
+
+            form.setValue('email', user.email);
+            form.setValue('firstName', firstName ?? '');
+            form.setValue('lastName', rest.join(' '));
+        }
+
+        fillData();
+    }, [form])
+
+    const onSubmit = async (data: CheckoutFormSchemaTypes) => {
+        try {
+            setSubmitting(true);
+            const url = await createOrder(data);
+            console.log(url);
+            toast.success('Заказ успешно оформлен! Переход на оплату..')
+
+            if (url) {
+                location.href = url;
+            }
+        } catch (e) {
+            console.log(e);
+            toast.error('Не удалось создать заказ')
+        } finally {
+            setSubmitting(false);
+        }
+    };
 
     return (
         <Container className="mt-13">
@@ -35,9 +67,7 @@ export default function CheckoutPage() {
 
             <FormProvider {...form}>
                 <form
-                    onSubmit={(e) => {
-                        form.handleSubmit(onSubmit);
-                    }}
+                    onSubmit={form.handleSubmit(onSubmit)}
                 >
                     <div className="flex gap-10">
                         {/* Левая часть */}
@@ -49,7 +79,7 @@ export default function CheckoutPage() {
 
                         {/* Правая часть */}
                         <div className=" w-[450px]">
-                            <CheckoutSidebar totalAmount={totalAmount} loading={loading} />
+                            <CheckoutSidebar submitting={submitting} totalAmount={totalAmount} loading={loading} />
                         </div>
                     </div>
                 </form>
