@@ -5,12 +5,13 @@ import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { Container } from './container';
 import { AuthModal, CartButton, ProfileButton } from './index';
 import { SearchInput } from './search-input';
 import { ProfileModal } from './modals/profile-modal';
+import { SearchParamsToast } from './search-params-toast';
 
 interface HeaderProps {
     hasSearch?: boolean;
@@ -22,26 +23,13 @@ export const Header: React.FC<HeaderProps> = ({ className, hasSearch = true, has
     const [openAuthModal, setOpenAuthModal] = useState(false);
     const [openProfileModal, setOpenProfileModal] = useState(false);
 
-    const searchParams = useSearchParams();
-    const router = useRouter();
-
-    useEffect(() => {
-        let toastMessage = '';
-
-        if (searchParams.has('paid')) {
-            toastMessage = 'Спасибо за покупку! Информация отправлена на почту'
-        } else if (searchParams.has('verified')) {
-            toastMessage = 'Аккаунт успешно подтвержден!'
-        }
-
-        if (toastMessage) {
-            toast.success(toastMessage)
-            router.replace('/')
-        }
-    }, [])
-
     return (
         <header className={cn('border border-b', className)}>
+
+            <Suspense fallback={null}>
+                <SearchParamsToast />
+            </Suspense>
+
             <Container className='flex items-center justify-between py-8'>
 
                 {/* Левая часть */}
