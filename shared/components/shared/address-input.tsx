@@ -6,7 +6,7 @@ import { Input } from '../ui';
 
 type Suggestion = { id: string; text: string; lat?: number; lon?: number };
 
-const API_KEY = process.env.NEXT_PUBLIC_TWOGIS_API_KEY ?? '';
+const API_KEY = process.env.TWOGIS_API_KEY ?? '';
 
 export const AddressInput: React.FC<{ name?: string, onChange?: () => void }> = ({ name = 'address', onChange }) => {
     const {
